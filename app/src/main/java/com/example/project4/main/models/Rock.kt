@@ -1,13 +1,16 @@
 package com.example.project4.main.models
 
-import androidx.lifecycle.ViewModel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.runBlocking
 
-data class Rock(
-    val name: String,
-    val mood: Int,
-    val jokeType: String
-)
 
-class RockViewModel : ViewModel(){
+class Rock(val name: String, private var mood: Int = 10, val jokeType: String, private var cleaned: Boolean){
+    fun decreaseMood(){
+        mood -= 1
+    }
+
+    fun isCleaned(): Boolean{
+        return cleaned
+    }
 
 }

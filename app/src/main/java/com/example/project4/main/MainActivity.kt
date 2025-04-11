@@ -7,7 +7,11 @@ import androidx.appcompat.app.AppCompatActivity
 import com.android.volley.Request
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
+import com.example.project4.R
 import com.example.project4.databinding.ActivityMainBinding
+import com.example.project4.main.models.Rock
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.runBlocking
 import org.json.JSONObject
 
 class MainActivity : AppCompatActivity() {
@@ -15,6 +19,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var jokeSetup : String
     private lateinit var jokePunchline : String
     private lateinit var jokeType : String
+    private lateinit var rock : Rock
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,6 +31,26 @@ class MainActivity : AppCompatActivity() {
             Log.d("MainActivity", "Button clicked")
             retrieveJoke()
         }
+
+        makeRockDirty()
+    }
+
+    private fun makeRockDirty(){
+        var rockImageCount = 0
+        val imageList = listOf(R.drawable.rockhappy)
+        // run iterations with a 2 second break in between each iteration
+        runBlocking {
+            val interval: Long = 2000
+            val iterations = 10
+
+            repeat(iterations){
+                rock.decreaseMood()
+                rockImageCount += 1
+                delay(interval)
+            }
+        }
+        binding.rockImage.setImageResource(imageList[rockImageCount])
+
     }
 
     private fun retrieveJoke() {

@@ -34,7 +34,7 @@
         app:layout_constraintVertical_bias="0.063" />
 
     <ImageView
-        android:id="@+id/rockHappy"
+        android:id="@+id/rockImage"
         android:layout_width="246dp"
         android:layout_height="280dp"
         android:contentDescription="@string/rock_with_happy_face"
@@ -43,7 +43,7 @@
         app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.456"
+        app:layout_constraintVertical_bias="0.45"
         app:srcCompat="@drawable/rockhappy" />
 
     <TextView
