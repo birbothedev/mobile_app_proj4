@@ -50,7 +50,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
         binding.rockImage.setImageResource(imageList[rockImageCount])
-
     }
 
     private fun retrieveJoke() {
