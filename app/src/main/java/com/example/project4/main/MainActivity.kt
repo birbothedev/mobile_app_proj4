@@ -10,7 +10,10 @@ import com.android.volley.toolbox.Volley
 import com.example.project4.R
 import com.example.project4.databinding.ActivityMainBinding
 import com.example.project4.main.models.Rock
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.json.JSONObject
 
@@ -27,29 +30,26 @@ class MainActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(binding.root)
 
+        rock = Rock()
+
+
         binding.getJokeButton.setOnClickListener {
             Log.d("MainActivity", "Button clicked")
             retrieveJoke()
         }
-
         makeRockDirty()
     }
 
     private fun makeRockDirty(){
-        var rockImageCount = 0
-        val imageList = listOf(R.drawable.rockhappy)
+        val imageList = listOf(R.drawable.rockhappy, R.drawable.rockdirt1, R.drawable.rockdirt2, R.drawable.rockdirt3,
+            R.drawable.rockdirt4, R.drawable.rockdirt5, R.drawable.rockdirt6, R.drawable.maxdirty)
         // run iterations with a 2 second break in between each iteration
-        runBlocking {
-            val interval: Long = 2000
-            val iterations = 10
-
-            repeat(iterations){
-                rock.decreaseMood()
-                rockImageCount += 1
-                delay(interval)
+        CoroutineScope(Dispatchers.Main).launch{
+            for (i in imageList.indices) {
+                binding.rockImage.setImageResource(imageList[i])
+                delay(1000)
             }
         }
-        binding.rockImage.setImageResource(imageList[rockImageCount])
     }
 
     private fun retrieveJoke() {
