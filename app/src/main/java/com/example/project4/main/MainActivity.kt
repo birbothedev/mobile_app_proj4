@@ -16,6 +16,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.json.JSONObject
+import kotlin.properties.Delegates
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding :  ActivityMainBinding
@@ -23,6 +24,10 @@ class MainActivity : AppCompatActivity() {
     private lateinit var jokePunchline : String
     private lateinit var jokeType : String
     private lateinit var rock : Rock
+    private var isCleaning by Delegates.notNull<Boolean>()
+
+    private val imageList = listOf(R.drawable.rockhappy, R.drawable.rockdirt1, R.drawable.rockdirt2, R.drawable.rockdirt3,
+        R.drawable.rockdirt4, R.drawable.rockdirt5, R.drawable.rockdirt6, R.drawable.maxdirty)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,24 +35,38 @@ class MainActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(binding.root)
 
+        isCleaning = false
         rock = Rock()
-
+        makeRockDirty()
 
         binding.getJokeButton.setOnClickListener {
-            Log.d("MainActivity", "Button clicked")
             retrieveJoke()
         }
-        makeRockDirty()
+
+        binding.rockImage.setOnClickListener{
+            isCleaning = true
+            Log.i("MainActivity", "Is cleaning after click: $isCleaning")
+        }
     }
 
     private fun makeRockDirty(){
-        val imageList = listOf(R.drawable.rockhappy, R.drawable.rockdirt1, R.drawable.rockdirt2, R.drawable.rockdirt3,
-            R.drawable.rockdirt4, R.drawable.rockdirt5, R.drawable.rockdirt6, R.drawable.maxdirty)
+        var rockImageCount = 0
         // run iterations with a 2 second break in between each iteration
         CoroutineScope(Dispatchers.Main).launch{
-            for (i in imageList.indices) {
-                binding.rockImage.setImageResource(imageList[i])
-                delay(1000)
+            if (isCleaning) {
+                // Clean rock (go backwards)
+                while (rockImageCount > 0) {
+                    rockImageCount--
+                    binding.rockImage.setImageResource(imageList[rockImageCount])
+                    delay(1000)
+                }
+            } else {
+                // Make rock dirty (go forwards)
+                while (rockImageCount < imageList.size - 1) {
+                    rockImageCount++
+                    binding.rockImage.setImageResource(imageList[rockImageCount])
+                    delay(1000)
+                }
             }
         }
     }
