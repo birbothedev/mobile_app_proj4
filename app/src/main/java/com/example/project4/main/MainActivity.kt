@@ -2,6 +2,7 @@ package com.example.project4.main
 
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.android.volley.Request
@@ -47,6 +48,11 @@ class MainActivity : AppCompatActivity() {
             isCleaning = true
             Log.i("MainActivity", "Is cleaning after click: $isCleaning")
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.overflow_menu, menu)
+        return true
     }
 
     private fun makeRockDirty(){
