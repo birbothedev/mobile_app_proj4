@@ -36,6 +36,11 @@ class MainActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(binding.root)
 
+        val toolbar = binding.toolbar
+        setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
+
+
         isCleaning = false
         rock = Rock()
         makeRockDirty()
@@ -61,6 +66,7 @@ class MainActivity : AppCompatActivity() {
         CoroutineScope(Dispatchers.Main).launch{
             if (isCleaning) {
                 // Clean rock (go backwards)
+
                 while (rockImageCount > 0) {
                     rockImageCount--
                     binding.rockImage.setImageResource(imageList[rockImageCount])
