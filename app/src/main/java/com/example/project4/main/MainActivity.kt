@@ -1,10 +1,14 @@
 package com.example.project4.main
 
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
+import android.view.MenuItem
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.PopupMenu
 import com.android.volley.Request
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
@@ -57,6 +61,21 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.overflow_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId){
+            R.id.dark_mode -> {
+                item.isChecked = !item.isChecked
+                if(item.isChecked){
+                    binding.root.setBackgroundColor(Color.parseColor("#034530"))
+                } else {
+                    binding.root.setBackgroundColor(Color.parseColor("#33ffbd"))
+                }
+
+            }
+        }
         return true
     }
 

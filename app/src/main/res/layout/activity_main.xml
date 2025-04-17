@@ -3,9 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
+    android:background="#33ffbd"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#33ffbd"
     tools:context=".main.MainActivity">
 
 
@@ -68,7 +68,9 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.064" />
+        app:layout_constraintVertical_bias="0.064"
+        app:popupTheme="@style/overflow_menu"
+        />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

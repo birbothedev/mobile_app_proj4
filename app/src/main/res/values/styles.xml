@@ -4,4 +4,8 @@
         <item name="android:background">@color/black_overlay</item>
         <item name="android:buttonBarStyle">?android:attr/buttonBarStyle</item>
     </style>
+    <style name="overflow_menu" parent="ThemeOverlay.AppCompat.Light">
+        <item name="android:popupBackground">@color/black</item>
+    </style>
+
 </resources>
