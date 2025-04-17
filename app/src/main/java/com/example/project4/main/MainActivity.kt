@@ -32,6 +32,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var rock : Rock
     private var isCleaning by Delegates.notNull<Boolean>()
     private val desiredJokeType = mutableListOf<String>()
+    private var rockImageCount = 0
 
     private val imageList = listOf(R.drawable.rockhappy, R.drawable.rockdirt1, R.drawable.rockdirt2, R.drawable.rockdirt3,
         R.drawable.rockdirt4, R.drawable.rockdirt5, R.drawable.rockdirt6, R.drawable.maxdirty)
@@ -51,17 +52,35 @@ class MainActivity : AppCompatActivity() {
         makeRockDirty()
 
         binding.getJokeButton.setOnClickListener {
-            retrieveJoke()
+            if(rock.isCleaned()){
+                retrieveJoke()
+            }
+            else {
+                binding.setupText.text = "Your rock is too unhappy to talk to you right now!"
+            }
         }
 
         binding.rockImage.setOnClickListener{
-            isCleaning = true
-            Log.i("MainActivity", "Is cleaning after click: $isCleaning")
+            if (!isCleaning){
+                isCleaning = true
+                cleanRock()
+            }
         }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.overflow_menu, menu)
+
+        // start with all joke options as checked by default
+        menu.findItem(R.id.general).isChecked = true
+        desiredJokeType.add("general")
+        menu.findItem(R.id.programming).isChecked = true
+        desiredJokeType.add("programming")
+        menu.findItem(R.id.knockknock).isChecked = true
+        desiredJokeType.add("knock-knock")
+        menu.findItem(R.id.dad).isChecked = true
+        desiredJokeType.add("dad")
+
         return true
     }
 
@@ -112,18 +131,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun makeRockDirty(){
-        var rockImageCount = 0
         // run iterations with a 2 second break in between each iteration
         CoroutineScope(Dispatchers.Main).launch{
-            if (isCleaning) {
-                // Clean rock (go backwards)
-
-                while (rockImageCount > 0) {
-                    rockImageCount--
-                    binding.rockImage.setImageResource(imageList[rockImageCount])
-                    delay(1000)
-                }
-            } else {
+            if (!isCleaning) {
                 // Make rock dirty (go forwards)
                 while (rockImageCount < imageList.size - 1) {
                     rockImageCount++
@@ -131,6 +141,18 @@ class MainActivity : AppCompatActivity() {
                     delay(1000)
                 }
             }
+        }
+    }
+
+    private fun cleanRock(){
+        CoroutineScope(Dispatchers.Main).launch {
+            // Clean rock (go backwards)
+            while (rockImageCount > 0) {
+                rockImageCount--
+                binding.rockImage.setImageResource(imageList[rockImageCount])
+                delay(1000)
+            }
+            isCleaning = false
         }
     }
 
@@ -166,9 +188,6 @@ class MainActivity : AppCompatActivity() {
                     }
 
                 }
-
-
-
             },
             {
                 Log.i("MainActivity", "That didn't work!")
