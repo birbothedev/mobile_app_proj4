@@ -20,6 +20,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import org.json.JSONArray
 import org.json.JSONObject
 import kotlin.properties.Delegates
 
@@ -30,6 +31,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var jokeType : String
     private lateinit var rock : Rock
     private var isCleaning by Delegates.notNull<Boolean>()
+    private val desiredJokeType = mutableListOf<String>()
 
     private val imageList = listOf(R.drawable.rockhappy, R.drawable.rockdirt1, R.drawable.rockdirt2, R.drawable.rockdirt3,
         R.drawable.rockdirt4, R.drawable.rockdirt5, R.drawable.rockdirt6, R.drawable.maxdirty)
@@ -43,7 +45,6 @@ class MainActivity : AppCompatActivity() {
         val toolbar = binding.toolbar
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayShowTitleEnabled(false)
-
 
         isCleaning = false
         rock = Rock()
@@ -73,7 +74,38 @@ class MainActivity : AppCompatActivity() {
                 } else {
                     binding.root.setBackgroundColor(Color.parseColor("#33ffbd"))
                 }
-
+            }
+            R.id.general -> {
+                item.isChecked = !item.isChecked
+                if (item.isChecked) {
+                    desiredJokeType.add("general")
+                } else {
+                    desiredJokeType.remove("general")
+                }
+            }
+            R.id.programming -> {
+                item.isChecked = !item.isChecked
+                if (item.isChecked) {
+                    desiredJokeType.add("programming")
+                } else {
+                    desiredJokeType.remove("programming")
+                }
+            }
+            R.id.dad -> {
+                item.isChecked = !item.isChecked
+                if (item.isChecked) {
+                    desiredJokeType.add("dad")
+                } else {
+                    desiredJokeType.remove("dad")
+                }
+            }
+            R.id.knockknock -> {
+                item.isChecked = !item.isChecked
+                if (item.isChecked) {
+                    desiredJokeType.add("knock-knock")
+                } else {
+                    desiredJokeType.remove("knock-knock")
+                }
             }
         }
         return true
@@ -103,21 +135,40 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun retrieveJoke() {
-        val jokeURL = "https://official-joke-api.appspot.com/random_joke"
+        val jokeURL = "https://official-joke-api.appspot.com/jokes/random/250"
         val queue = Volley.newRequestQueue(this)
 
         val stringRequest = StringRequest (
             Request.Method.GET, jokeURL,
             {response ->
-                val jokeObject = JSONObject(response)
+                val jokeArray = JSONArray(response)
+                val filteredJokes = mutableListOf<JSONObject>()
 
-                jokeType = jokeObject.getString("type")
-                jokeSetup = jokeObject.getString("setup")
-                jokePunchline = jokeObject.getString("punchline")
+                for (i in 0 until jokeArray.length()) {
+                    val jokeObject = jokeArray.getJSONObject(i)
+                    jokeType = jokeObject.getString("type")
+
+                    if (desiredJokeType.contains(jokeType)){
+                        filteredJokes.add(jokeObject)
+                    }
+
+                    if (filteredJokes.isNotEmpty()){
+                        val joke = filteredJokes.random()
+
+                        jokeSetup = joke.getString("setup")
+                        jokePunchline = joke.getString("punchline")
+
+                        binding.setupText.text = jokeSetup
+                        binding.punchlineText.text = jokePunchline
+                    } else {
+                        binding.setupText.text = "No jokes of this type."
+                        binding.punchlineText.text = " "
+                    }
+
+                }
 
 
-                binding.setupText.text = jokeSetup
-                binding.punchlineText.text = jokePunchline
+
             },
             {
                 Log.i("MainActivity", "That didn't work!")

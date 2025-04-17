@@ -2,7 +2,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-
     <item
         android:id="@+id/dark_mode"
         android:title="Dark Mode"
@@ -10,11 +9,26 @@
     />
 
     <item
-        android:id="@+id/menu_settings"
-        android:title="Settings"
+        android:title="Joke Types"
         app:showAsAction="never" />
-    <item
-        android:id="@+id/menu_help"
-        android:title="Help"
-        app:showAsAction="never" />
+
+    <group android:checkableBehavior="all">
+        <item
+            android:id="@+id/general"
+            android:title="General Jokes"
+            android:checkable="true" />
+        <item
+            android:id="@+id/programming"
+            android:title="Programming Jokes"
+            android:checkable="true" />
+        <item
+            android:id="@+id/dad"
+            android:title="Dad Jokes"
+            android:checkable="true" />
+        <item
+            android:id="@+id/knockknock"
+            android:title="Knock-Knock"
+            android:checkable="true" />
+    </group>
+
 </menu>
