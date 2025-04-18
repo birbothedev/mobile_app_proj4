@@ -1,16 +1,18 @@
 package com.example.project4.main.models
 
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.runBlocking
+class Rock {
+    private var name : String = ""
+    private var cleaned: Boolean = true
 
-
-class Rock(val name: String = "", private var mood: Int = 10, val jokeType: String = "", private var cleaned: Boolean = true){
-
-    fun decreaseMood(){
-        mood -= 1
+    fun setName(name : String){
+        this.name = name
     }
 
-    fun isCleaned(): Boolean{
+    fun setCleaned(cleaned : Boolean){
+        this.cleaned = cleaned
+    }
+
+    fun isCleaned(): Boolean {
         return cleaned
     }
 

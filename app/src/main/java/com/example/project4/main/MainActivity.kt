@@ -1,14 +1,12 @@
 package com.example.project4.main
 
 import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.PopupMenu
 import com.android.volley.Request
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
@@ -19,7 +17,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import org.json.JSONArray
 import org.json.JSONObject
 import kotlin.properties.Delegates
@@ -33,6 +30,7 @@ class MainActivity : AppCompatActivity() {
     private var isCleaning by Delegates.notNull<Boolean>()
     private val desiredJokeType = mutableListOf<String>()
     private var rockImageCount = 0
+    private var lastCleanTime : Long = 0
 
     private val imageList = listOf(R.drawable.rockhappy, R.drawable.rockdirt1, R.drawable.rockdirt2, R.drawable.rockdirt3,
         R.drawable.rockdirt4, R.drawable.rockdirt5, R.drawable.rockdirt6, R.drawable.maxdirty)
@@ -64,7 +62,13 @@ class MainActivity : AppCompatActivity() {
             if (!isCleaning){
                 isCleaning = true
                 cleanRock()
+                lastCleanTime = System.currentTimeMillis()
             }
+        }
+
+        binding.statsButton.setOnClickListener {
+            val rockStatsSheet = RockStats()
+            rockStatsSheet.show(supportFragmentManager, "RockStats")
         }
     }
 
@@ -133,27 +137,32 @@ class MainActivity : AppCompatActivity() {
     private fun makeRockDirty(){
         // run iterations with a 2 second break in between each iteration
         CoroutineScope(Dispatchers.Main).launch{
-            if (!isCleaning) {
+            while (true) {
+                delay(3000)
+                val currentTime = System.currentTimeMillis()
+                val timeSinceClean = currentTime - lastCleanTime
                 // Make rock dirty (go forwards)
-                while (rockImageCount < imageList.size - 1) {
+                if (rockImageCount < imageList.size - 1 && timeSinceClean > 5000) {
                     rockImageCount++
                     binding.rockImage.setImageResource(imageList[rockImageCount])
-                    delay(1000)
+                }
+                if (rockImageCount >= 7){
+                    rock.setCleaned(false)
                 }
             }
         }
     }
 
     private fun cleanRock(){
-        CoroutineScope(Dispatchers.Main).launch {
-            // Clean rock (go backwards)
-            while (rockImageCount > 0) {
-                rockImageCount--
-                binding.rockImage.setImageResource(imageList[rockImageCount])
-                delay(1000)
-            }
-            isCleaning = false
+        // Clean rock (go backwards)
+        if (rockImageCount > 0) {
+            rockImageCount--
+            binding.rockImage.setImageResource(imageList[rockImageCount])
         }
+        if (rockImageCount <= 7){
+            rock.setCleaned(true)
+        }
+        isCleaning = false
     }
 
     private fun retrieveJoke() {
