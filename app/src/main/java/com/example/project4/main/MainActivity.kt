@@ -21,7 +21,7 @@ import org.json.JSONArray
 import org.json.JSONObject
 import kotlin.properties.Delegates
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), RockStats.RockStatsListener {
     private lateinit var binding :  ActivityMainBinding
     private lateinit var jokeSetup : String
     private lateinit var jokePunchline : String
@@ -52,9 +52,11 @@ class MainActivity : AppCompatActivity() {
         binding.getJokeButton.setOnClickListener {
             if(rock.isCleaned()){
                 retrieveJoke()
+                rock.addJokeCount()
             }
             else {
                 binding.setupText.text = "Your rock is too unhappy to talk to you right now!"
+                binding.punchlineText.text = " "
             }
         }
 
@@ -63,12 +65,15 @@ class MainActivity : AppCompatActivity() {
                 isCleaning = true
                 cleanRock()
                 lastCleanTime = System.currentTimeMillis()
+                rock.addCleanCount()
             }
         }
 
         binding.statsButton.setOnClickListener {
-            val rockStatsSheet = RockStats()
-            rockStatsSheet.show(supportFragmentManager, "RockStats")
+            // In your Activity or Fragment
+            val bottomSheetDialog = RockStats()
+            bottomSheetDialog.listener = this
+            bottomSheetDialog.show(supportFragmentManager, "RockStats")
         }
     }
 
@@ -94,6 +99,9 @@ class MainActivity : AppCompatActivity() {
                 item.isChecked = !item.isChecked
                 if(item.isChecked){
                     binding.root.setBackgroundColor(Color.parseColor("#034530"))
+                    binding.rockName.setTextColor(Color.parseColor("#ffffff"))
+                    binding.setupText.setTextColor(Color.parseColor("#ffffff"))
+                    binding.punchlineText.setTextColor(Color.parseColor("#ffffff"))
                 } else {
                     binding.root.setBackgroundColor(Color.parseColor("#33ffbd"))
                 }
@@ -203,5 +211,10 @@ class MainActivity : AppCompatActivity() {
         })
 
         queue.add(stringRequest)
+    }
+
+    override fun onRockNameEntered(name: String) {
+        rock.setName(name)
+        binding.rockName.text = rock.getName()
     }
 }
