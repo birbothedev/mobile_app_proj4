@@ -2,7 +2,6 @@ package com.example.project4.main
 
 import android.content.res.Resources
 import android.os.Bundle
-import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,6 +17,8 @@ class RockStats : BottomSheetDialogFragment() {
     private val binding get() = _binding!!
 
     var listener: RockStatsListener? = null
+    private var jokeCount: Int = 0
+    private var cleanCount: Int = 0
 
     override fun onCreateView (
         inflater: LayoutInflater,
@@ -37,6 +38,17 @@ class RockStats : BottomSheetDialogFragment() {
             dismiss()
         }
 
+        binding.totalJokes.text = jokeCount.toString()
+        binding.totalCleans.text = cleanCount.toString()
+
+    }
+
+    fun setJokeStats(totalJokes: Int){
+        jokeCount = totalJokes
+    }
+
+    fun setCleanCount(count : Int){
+        cleanCount = count
     }
 
     interface RockStatsListener {

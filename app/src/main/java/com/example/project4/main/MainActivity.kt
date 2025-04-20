@@ -72,6 +72,10 @@ class MainActivity : AppCompatActivity(), RockStats.RockStatsListener {
         binding.statsButton.setOnClickListener {
             // In your Activity or Fragment
             val bottomSheetDialog = RockStats()
+
+            bottomSheetDialog.setJokeStats(rock.getJokeCount())
+            bottomSheetDialog.setCleanCount(rock.getCleanedCount())
+
             bottomSheetDialog.listener = this
             bottomSheetDialog.show(supportFragmentManager, "RockStats")
         }
@@ -80,15 +84,11 @@ class MainActivity : AppCompatActivity(), RockStats.RockStatsListener {
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.overflow_menu, menu)
 
-        // start with all joke options as checked by default
-        menu.findItem(R.id.general).isChecked = true
-        desiredJokeType.add("general")
-        menu.findItem(R.id.programming).isChecked = true
-        desiredJokeType.add("programming")
-        menu.findItem(R.id.knockknock).isChecked = true
-        desiredJokeType.add("knock-knock")
-        menu.findItem(R.id.dad).isChecked = true
-        desiredJokeType.add("dad")
+        menu.findItem(R.id.general).isChecked = "general" in desiredJokeType
+        menu.findItem(R.id.programming).isChecked = "programming" in desiredJokeType
+        menu.findItem(R.id.knockknock).isChecked = "knock-knock" in desiredJokeType
+        menu.findItem(R.id.dad).isChecked = "dad" in desiredJokeType
+
 
         return true
     }

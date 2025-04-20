@@ -31,11 +31,11 @@ class Rock {
     }
 
     fun addJokeCount(){
-        cleanedCount ++
+        jokeCount ++
     }
 
     fun getJokeCount(): Int{
-        return cleanedCount
+        return jokeCount
     }
 
 }
