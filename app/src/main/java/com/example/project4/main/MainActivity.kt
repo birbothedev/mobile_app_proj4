@@ -89,7 +89,6 @@ class MainActivity : AppCompatActivity(), RockStats.RockStatsListener {
         menu.findItem(R.id.knockknock).isChecked = "knock-knock" in desiredJokeType
         menu.findItem(R.id.dad).isChecked = "dad" in desiredJokeType
 
-
         return true
     }
 
@@ -104,6 +103,9 @@ class MainActivity : AppCompatActivity(), RockStats.RockStatsListener {
                     binding.punchlineText.setTextColor(Color.parseColor("#ffffff"))
                 } else {
                     binding.root.setBackgroundColor(Color.parseColor("#33ffbd"))
+                    binding.rockName.setTextColor(Color.parseColor("#000000"))
+                    binding.setupText.setTextColor(Color.parseColor("#000000"))
+                    binding.punchlineText.setTextColor(Color.parseColor("#000000"))
                 }
             }
             R.id.general -> {
@@ -149,7 +151,7 @@ class MainActivity : AppCompatActivity(), RockStats.RockStatsListener {
                 delay(3000)
                 val currentTime = System.currentTimeMillis()
                 val timeSinceClean = currentTime - lastCleanTime
-                // Make rock dirty (go forwards)
+                // Make rock dirty (go forwards in image list)
                 if (rockImageCount < imageList.size - 1 && timeSinceClean > 5000) {
                     rockImageCount++
                     binding.rockImage.setImageResource(imageList[rockImageCount])
@@ -162,7 +164,7 @@ class MainActivity : AppCompatActivity(), RockStats.RockStatsListener {
     }
 
     private fun cleanRock(){
-        // Clean rock (go backwards)
+        // Clean rock (go backwards in image list)
         if (rockImageCount > 0) {
             rockImageCount--
             binding.rockImage.setImageResource(imageList[rockImageCount])
