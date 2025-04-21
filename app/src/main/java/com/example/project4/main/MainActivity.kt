@@ -75,6 +75,7 @@ class MainActivity : AppCompatActivity(), RockStats.RockStatsListener {
 
             bottomSheetDialog.setJokeStats(rock.getJokeCount())
             bottomSheetDialog.setCleanCount(rock.getCleanedCount())
+            bottomSheetDialog.setCleanStatus(rock.isCleaned())
 
             bottomSheetDialog.listener = this
             bottomSheetDialog.show(supportFragmentManager, "RockStats")

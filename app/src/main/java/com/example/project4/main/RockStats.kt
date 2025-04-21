@@ -19,6 +19,7 @@ class RockStats : BottomSheetDialogFragment() {
     var listener: RockStatsListener? = null
     private var jokeCount: Int = 0
     private var cleanCount: Int = 0
+    private var cleanStatus: Boolean = true
 
     override fun onCreateView (
         inflater: LayoutInflater,
@@ -41,6 +42,12 @@ class RockStats : BottomSheetDialogFragment() {
         binding.totalJokes.text = jokeCount.toString()
         binding.totalCleans.text = cleanCount.toString()
 
+        if (cleanStatus){
+            binding.rockStatus.text = "Clean"
+        } else {
+            binding.rockStatus.text = "Dirty"
+        }
+
     }
 
     fun setJokeStats(totalJokes: Int){
@@ -49,6 +56,10 @@ class RockStats : BottomSheetDialogFragment() {
 
     fun setCleanCount(count : Int){
         cleanCount = count
+    }
+
+    fun setCleanStatus(boolean: Boolean){
+        cleanStatus = boolean
     }
 
     interface RockStatsListener {
